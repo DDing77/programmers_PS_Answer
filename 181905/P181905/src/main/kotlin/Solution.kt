@@ -1,5 +1,13 @@
 class Solution {
-    fun solution(my_string: String, s: Int, e: Int) = my_string.substring(0, s) +
-            my_string.substring(s, e + 1).reversed() +
-            my_string.substring(e + 1)
+    fun solution(my_string: String, queries: Array<IntArray>): String {
+        var answer: String = my_string
+
+        queries.forEach {
+            answer = answer.substring(0, it[0]) +
+                    answer.substring(it[0]..it[1]).reversed() +
+                    answer.substring(it[1] + 1)
+        }
+
+        return answer
+    }
 }
