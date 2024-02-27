@@ -8,7 +8,7 @@ import java.util.HashMap;
 //public class Main {
 //    // 2번 문제
 //
-//    public static void main(String[] args) throws IOException {
+//    public static void level0.p181949.level0.p181950.level0.p181949.main(String[] args) throws IOException {
 //        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 //        String input = br.readLine();
 //
