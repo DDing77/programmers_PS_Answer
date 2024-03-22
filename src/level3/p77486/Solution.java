@@ -1,79 +1,61 @@
 package level3.p77486;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * Author : DDing77
+ * Problem Name : 다단계 칫솔 판매
+ * Level : 3
+ * Language : Java
+ * Category : DFS
+ * Url : https://school.programmers.co.kr/learn/courses/30/lessons/77486
+ */
+
 class Solution {
 
-    HashMap<Integer, String> memberIntString;
-    HashMap<String, Integer> memberStringInt;
-    HashMap<String, Integer> sellerAmount;
-    ArrayList<Integer>[] edges;
-    int[] answer;
+    HashMap<String, String> edges;
+    HashMap<String, Integer> revenue;
 
-    private int execDFS(int node, String[] enroll) {
-
-        if (edges[node].size() == 0) {
-            if (sellerAmount.containsKey(memberIntString.get(node))) {
-                int amount = sellerAmount.get(memberIntString.get(node));
-                answer[node - 1] = (int) ((amount * 100 )* 0.9);
-                return (int) ((amount * 100 )* 0.1);
-            }
-            return 0;
+    private void execDFS(String curPerson, int money) {
+        if (curPerson.equals("-") || money == 0) {
+            return;
         }
 
-        int res = sellerAmount.getOrDefault(enroll[node], 0);
+        int charge = money / 10;
+        int myRevenue = money - charge;
 
-        for (int next : edges[node]) {
-            res += execDFS(next, enroll);
-        }
-
-        answer[node] = (int) (res * 0.9);
-        return (int) (res * 0.1);
+        revenue.put(curPerson, revenue.get(curPerson) + myRevenue);
+        execDFS(edges.get(curPerson), charge);
     }
 
     public int[] solution(String[] enroll, String[] referral, String[] seller, int[] amount) {
 
-        memberIntString = new HashMap<>();
-        memberStringInt = new HashMap<>();
-        for (int i = 0; i < enroll.length; i++) {
-            memberIntString.put(i + 1, enroll[i]);
-            memberStringInt.put(enroll[i], i + 1);
-        }
-
-        edges = new ArrayList[enroll.length + 1];
-        for (int i = 0; i <= enroll.length; i++) {
-            edges[i] = new ArrayList<>();
-        }
-
+        edges = new HashMap<>();
+        revenue = new HashMap<>();
         for (int i = 0; i < referral.length; i++) {
-            if (referral[i].equals("-")) {
-                edges[0].add(i + 1);
-                continue;
-            }
-            edges[memberStringInt.get(referral[i])].add(i + 1);
+            edges.put(enroll[i], referral[i]);
+            revenue.put(enroll[i], 0);
         }
 
-        sellerAmount = new HashMap<>();
         for (int i = 0; i < seller.length; i++) {
-            sellerAmount.put(seller[i], amount[i]);
+            execDFS(seller[i], amount[i] * 100);
         }
 
-        for (int i = 0; i < edges.length; i++) {
-            System.out.println(edges[i]);
+        int[] answer = new int[enroll.length];
+        for (int i = 0; i < enroll.length; i++) {
+            answer[i] = revenue.get(enroll[i]);
         }
 
-        answer = new int[enroll.length];
-        execDFS(0, enroll);
         return answer;
     }
 
     public static void main(String[] args) {
         Solution test = new Solution();
-        System.out.println(Arrays.toString(test.solution(new String[]{"john", "mary", "edward", "sam", "emily", "jaimie", "tod", "young"},
+        System.out.println(Arrays.toString(test.solution(
+                new String[]{"john", "mary", "edward", "sam", "emily", "jaimie", "tod", "young"},
                 new String[]{"-", "-", "mary", "edward", "mary", "mary", "jaimie", "edward"},
-                new String[]{"young", "john", "tod", "emily", "mary"},
-                new int[]{12, 4, 2, 5, 10})));
+                new String[]{"sam", "emily", "jaimie", "edward"},
+                new int[]{2, 3, 5, 4})));
     }
 }
