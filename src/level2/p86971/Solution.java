@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 class Solution {
 
+
     private int[] parents;
 
     public int find(int x) {
